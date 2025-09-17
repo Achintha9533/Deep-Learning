@@ -1,19 +1,25 @@
 # Infix to Postfix Notation Translation with Neural Networks
 
-This project implements a neural network to translate mathematical formulas from **infix notation** to **postfix notation** (also known as Reverse Polish Notation).
+The purpose of this project is to implement a neural network that performs the translation of mathematical formulae from traditional **infix notation**—where the operator appears between two operands—to **postfix** (also known as Reverse Polish Notation), where the operator follows the operands.
 
-Infix notation is common in human-readable mathematics (e.g., `a + b`), but it can be ambiguous without parentheses or operator precedence rules. Postfix notation, on the other hand, eliminates the need for parentheses because the order of operations is explicitly defined by the placement of operators after their operands, which makes it suitable for stack-based evaluation.
+Infix notation is the most commonly used in human-readable mathematics (e.g., a + b), but it is inherently ambiguous without additional syntactic aids such as parentheses or operator precedence rules. This ambiguity arises because different parse trees can correspond to the same expression depending on how operations are grouped.
 
-This project uses a data-driven approach with a neural network to learn to generate the correct postfix form from a given infix expression. The dataset is restricted to formulas with a maximum syntactic depth of 3 to simplify the task and manage expression complexity.
+In contrast, postfix notation eliminates the need for parentheses entirely. The order of operations is explicitly encoded by the position of the operators relative to the operands, making it more suitable for stack-based evaluation and easier to parse programmatically.
 
-### Key Components
+**Example:**
 
-* **Expression Generation**: The `generate_infix_expression` function generates mathematical formulas using 5 identifiers (`a`, `b`, `c`, `d`, `e`) and 4 binary operators (`+`, `-`, `*`, `/`).
-* **Notation Conversion**: The `infix_to_postfix` function converts a list of infix tokens to postfix notation.
-* **Encoding/Decoding**: Functions `encode` and `decode_sequence` are used to convert token lists to integer IDs and back to readable strings.
-* **Sequence-to-Sequence Model**: The project uses a sequence-to-sequence (seq2seq) model with a Luong-style dot-product attention mechanism for the translation. The model includes an encoder, a decoder, and an attention layer to focus on relevant input parts during output generation.
+Consider the ambiguous infix expression:
+`a + b * c`
 
----
+This expression can be parsed in at least two different ways:
+
+* **Interpretation (Infix):** `(a + b) * c`
+    * **Equivalent Postfix:** `ab+c*`
+
+* **Interpretation (Infix):** `a + (b * c)`
+    * **Equivalent Postfix:** `abc*+`
+
+This project takes a data-driven approach to learn the correct postfix form from a given infix expression.
 
 ### Constraints
 
