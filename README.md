@@ -1,14 +1,56 @@
-Neural Network for Infix to Postfix TranslationProject DescriptionThis project implements a neural network to translate mathematical formulas from infix notation to postfix notation (also known as Reverse Polish Notation or RPN).Infix notation, such as $a + b * c$, is the most common form for human-readable mathematics. However, it can be ambiguous without rules of precedence or parentheses. Postfix notation, like $ab+c*$ or $abc*+$, eliminates this ambiguity by placing the operator after its operands, making it easier for computers to parse and evaluate using a stack-based approach.Problem StatementThe core problem addressed is the ambiguity of infix expressions. For example, the expression $a + b * c$ can be interpreted in two ways:Interpretation 1 (Infix): (a+b)\*cEquivalent Postfix: ab+c\*Interpretation 2 (Infix): a+(b\*c)Equivalent Postfix: abc\*+This project takes a data-driven approach to learn the correct postfix form from a given infix expression by modeling the translation as a sequence-to-sequence problem.Model ArchitectureThe neural network is built using a sequence-to-sequence (Seq2Seq) architecture with an attention mechanism, which helps the model focus on relevant parts of the input sequence during translation.Encoder: An LSTM (Long Short-Term Memory) network processes the input infix expression and compresses it into a context vector, which represents the state of the expression.Decoder: Another LSTM network, initialized with the encoder's final state, generates the output postfix expression one token at a time.Attention: A Luong-style attention mechanism is implemented to allow the decoder to "look back" at the encoder's output at each step, ensuring that the model maintains a strong connection between the input and output sequences.How to UseDependenciesTo run the notebook, you need to install the following Python libraries:pip install tensorflow gdown
-Running the CodeClone the Repository:git clone <your-repo-url>
-cd <your-repo-folder>
-Open and Run: Open the Infix_to_postifx_notation.ipynb notebook and run all cells. The notebook will automatically:Generate a synthetic dataset of infix and postfix expressions.Build and compile the Seq2Seq model.Train the model on the generated data.Download pre-trained weights to speed up inference.Provide an example of how to predict the postfix form of a new infix expression.Sample OutputThe program will output the model summary during training and a final prediction for a test expression:Model: "functional"
-...
-Epoch 1/25
-...
-Downloading and loading model weights...
-Downloading...
-From: [https://drive.google.com/uc?id=1OwZQ7maaDxedvDgTyW9gyQKIMV1K0SZ-](https://drive.google.com/uc?id=1OwZQ7maaDxedvDgTyW9gyQKIMV1K0SZ-)
-...
-Input: a+b*c
-Predicted Postfix: abc*+
-Data GenerationThe project uses a recursive function to generate a diverse dataset of infix expressions. A standard algorithm based on a stack is then used to convert these expressions into their correct postfix form for training the model. The model learns the rules of operator precedence and associativity implicitly from this data.CreditsThis project is a conceptual implementation of a neural network for notation translation.
+# Project Description:
+
+The purpose of this project is to implement a neural network that performs the translation of mathematical formulae from traditional **infix notation**—where the operator appears between two operands—to **postfix** (also known as Reverse Polish Notation), where the operator follows the operands.
+
+Infix notation is the most commonly used in human-readable mathematics (e.g., a + b), but it is inherently ambiguous without additional syntactic aids such as parentheses or operator precedence rules. This ambiguity arises because different parse trees can correspond to the same expression depending on how operations are grouped.
+
+In contrast, postfix notation eliminates the need for parentheses entirely. The order of operations is explicitly encoded by the position of the operators relative to the operands, making it more suitable for stack-based evaluation and easier to parse programmatically.
+
+**Example:**
+
+Consider the ambiguous infix expression:
+a + b * c
+
+This expression can be parsed in at least two different ways:
+
+Interpretation (Infix):	(a + b) * c	   
+Equivalent Postfix: ab+c*
+
+Interpretation (Infix):	a + (b * c)	          
+Equivalent Postfix: abc*+
+
+
+This project aims to learn such disambiguations and generate the correct postfix form from a given infix expression using a data-driven approach based on neural networks. To simplify the task and control the complexity of expressions, we restrict our dataset to formulae with a maximum syntactic depth of 3. This means that the abstract syntax trees representing these expressions will have at most three levels, ensuring that the neural network operates on a bounded and manageable set of possible structures.
+
+# Constraints
+* You may use any architecture (decoder-only, encoder-decoder, or other).
+
+* The maximum number of parameters is 2 million.
+
+* Beam search is not allowed.
+
+* You may adapt the formula generator to your needs, but preserve its core logic—especially the frequency distribution of formulas by depth, as it may significantly influence model performance.
+
+* You may train your model using a pre-generated fixed dataset (e.g., an array) or directly use an on-the-fly generator.
+
+
+# Evaluation
+
+We shall evaluate a generated item y_pred using "prefix accuracy", the lenght of
+the initial prefix of y_pred matching the ground true y_true. This will be divided by the maximum length of y_true and y_pred (up to EOS), so that a perfect match has score 1.
+
+* It's more informative than exact match (which is often 0)
+
+* It’s tighter than edit distance: focuses on generation flow
+
+* Captures where the model starts to make errors
+
+# What to deliver
+
+As usual you are supposed to deliver a single notebook witten in Keras. You are auhtorized to use Keras3 with pytorch as backend if your prefer.
+
+Do no upload a zip file: the submission will be rejected.
+
+The python notebook should have a clear documentation of the training phase, possibly with its history.
+
+You should be able to provide the network paramters upon request. Even better, consider a way to upload them inside your notebook using gdown.
